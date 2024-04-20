@@ -282,8 +282,6 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
         
         st.write(css, unsafe_allow_html=True)
 
-        
-
         e1, c1, e2 = st.columns((1, 60, 1))
 
         with c1:
@@ -303,20 +301,20 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
                 )
             with c21:
                 ui.metric_card(
-                    title="Model Size (MB)",
-                    content="57.23",
+                    title="Model Size",
+                    content="57.23 MB",
                     key="metric_card_2_1"
                 )
             with c22:
                 ui.metric_card(
-                    title="Parameters (Millions)",
-                    content="15",
+                    title="Parameters",
+                    content="15001418",
                     key="metric_card_2_2"
                 )
             with e1:
                 ui.metric_card(
-                    title="Training Time (Hrs)",
-                    content="2.8",
+                    title="Training Time",
+                    content="2.8 Hrs",
                     key="metric_card_e1"
                 )
         
@@ -339,21 +337,21 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
                 )
             with c21:
                 ui.metric_card(
-                    content="4.22",
-                    description="-53.01",
+                    content="4.22 MB",
+                    description="-53.01.MB",
                     key="metric_card_4_1"
                 )
             with c22:
                 ui.metric_card(
-                    content="1.08",
-                    description="-13.91",
+                    content="1086026",
+                    description="-13915392",
                     key="metric_card_4_2"
                 )
             with e2:
                 ui.metric_card(
-                    content="1.5",
+                    content="1.5 Hrs",
                     key="metric_card_e2",
-                    description="-1.3",
+                    description="-1.3 Hrs",
                 )
        
         st.write("<hr>", unsafe_allow_html=True)
