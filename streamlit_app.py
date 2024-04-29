@@ -53,7 +53,7 @@ def plot_confusion_matrix(confusion_matrix):
 
 def plot_accuracy_per_class(confusion_matrix):
     accuracy_per_class = (confusion_matrix.values.diagonal() / confusion_matrix.values.sum(axis=1)) * 100
-    fig = go.Figure(go.Bar(x=class_names, y=accuracy_per_class, marker_color='blue'))
+    fig = go.Figure(go.Bar(x=class_names, y=accuracy_per_class, marker_color='cadetblue'))
     fig.update_layout(title='Accuracy per Class',
                       xaxis_title='Class',
                       yaxis_title='Accuracy (%)',
