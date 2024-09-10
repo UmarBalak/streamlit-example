@@ -8,12 +8,13 @@ import numpy as np
 import pickle
 import streamlit_shadcn_ui as ui
 
+
+
 class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 with open('actual_labels.pkl', 'rb') as f:
     actual_labels = pickle.load(f)
 predictions = np.load('predictions.npy')
-
 
 # Function to calculate confusion matrix
 def calculate_confusion_matrix(predictions, actual):
@@ -146,8 +147,8 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
     st.write("<style>.option-menu-container { margin-top: -30px; }</style>", unsafe_allow_html=True)
     page = option_menu(
         menu_title=None,
-        options=["Home", "Architecture", "Performance", "Compare"],
-        icons = ["house", "diagram-2-fill", "bar-chart", "activity"],
+        options=["Home", "Architecture", "Performance"],
+        icons = ["house", "diagram-2-fill", "bar-chart"],
         menu_icon="cast",
         default_index=0,
         orientation="horizontal",
@@ -159,21 +160,13 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
         
         cols = st.columns((1, 7, 1))
         with cols[1]:
-            st.markdown('''<p style='text-align: justify;'>Get ready to dive into the exciting world of image classification with Convolutional Neural Networks (CNNs)!
-                     Explore the model's performance metrics and unleash the power of deep learning on the Dashboard tab.
-                    Navigate to the Dashboard tab now to witness the magic!
-                    </p>''', unsafe_allow_html=True)
+            st.markdown('''
+    <p style='text-align: justify; font-size: 16px;'>
+    Welcome to the TinyVGG Image Classification Demo! This app demonstrates an optimized CNN model inspired by the VGG16 architecture, designed to efficiently classify images from the CIFAR-10 dataset. TinyVGG is a lightweight, high-performance model, achieving 92% accuracy with just a 4MB model size. It combines the power of VGG16 with an emphasis on efficiency, making it well-suited for real-world applications where both performance and resource constraints are critical. The model is built using TensorFlow and Keras, leveraging convolutional neural network (CNN) techniques for image classification. Feel free to upload an image or explore the app's features to see the model in action!
+    </p>
+''', unsafe_allow_html=True)
 
 
-            st.markdown('''<p style='text-align: justify;'>The aim of this project is to enhance the performance of image classification using
-                        a customized Convolutional Neural Network (CNN) architecture tailored for the CIFAR-10 dataset, surpassing the capabilities
-                        of the existing VGG-16 architecture. Three primary objectives guided this endeavor:
-                        Firstly, to bolster the accuracy of classification results, ensuring more precise and reliable predictions across diverse classes within the CIFAR-10 dataset. 
-                        Secondly, to mitigate the computational burden associated with training by reducing the overall training time required to achieve optimal performance,
-                        thereby enhancing the efficiency of the model development process. Lastly, to address the issue of model size, aiming to create a more compact architecture without sacrificing accuracy, 
-                        thereby facilitating easier deployment and integration into practical applications with constrained resources. These objectives collectively aimed to push the boundaries of image classification performance 
-                        while simultaneously addressing critical challenges such as computational complexity and model size, thus paving the way for more effective and efficient CNN-based solutions in real-world scenarios.</p>''',
-                        unsafe_allow_html=True)
             
     elif page == "Architecture":
         st.write("<div style='margin: 10px;'></div>", unsafe_allow_html=True)
@@ -264,126 +257,6 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
         with right:
             st.plotly_chart(fig_precision_recall_f1, use_container_width=True)
 
-
-
-    elif page == "Compare":
-        st.markdown("<h2 style='text-align: center; color: #000000;'>TinyVGG &nbsp; vs &nbsp; Cifar-VGG</h2>", unsafe_allow_html=True)
-        st.markdown("<h4 style='text-align: center; color: #000000;'>Exploring the Depths of Performance and Accuracy.</h4>", unsafe_allow_html=True)
-
-        st.write("<div style='margin: 40px;'></div>", unsafe_allow_html=True)
-
-        css = """
-        <style>
-        .subheader-color {
-            color: #FF4B4B; /* Specify your desired color */
-        }
-        </style>
-        """
-        
-        st.write(css, unsafe_allow_html=True)
-
-        e1, c1, e2 = st.columns((1, 60, 1))
-
-        with c1:
-            st.markdown("<h4 class='subheader-color'>Cifar-VGG</h4>", unsafe_allow_html=True)
-            c11, c12, c21, c22, e1 = st.columns(5)
-            with c11:
-                ui.metric_card(
-                    title="Accuracy",
-                    content="93.43%",
-                    key="metric_card_1_1"
-                )
-            with c12:
-                ui.metric_card(
-                    title="Loss",
-                    content="0.47",
-                    key="metric_card_1_2"
-                )
-            with c21:
-                ui.metric_card(
-                    title="Model Size",
-                    content="57.23 MB",
-                    key="metric_card_2_1"
-                )
-            with c22:
-                ui.metric_card(
-                    title="Parameters",
-                    content="15001418",
-                    key="metric_card_2_2"
-                )
-            with e1:
-                ui.metric_card(
-                    title="Training Time",
-                    content="2.8 Hrs",
-                    key="metric_card_e1"
-                )
-        
-        st.write("<div style='margin: 10px;'></div>", unsafe_allow_html=True)
-        e1, c1, e = st.columns((1, 60, 1))
-        with c1:
-            st.markdown("<h4 class='subheader-color'>TinyVGG</h4>", unsafe_allow_html=True)
-            c11, c12, c21, c22, e2 = st.columns(5)
-            with c11:
-                ui.metric_card(
-                    content="91.94%",
-                    description="-1.49%",
-                    key="metric_card_3_1"
-                )
-            with c12:
-                ui.metric_card(
-                    content="0.39",
-                    description="-0.08",
-                    key="metric_card_3_2"
-                )
-            with c21:
-                ui.metric_card(
-                    content="4.22 MB",
-                    description="-53.01.MB",
-                    key="metric_card_4_1"
-                )
-            with c22:
-                ui.metric_card(
-                    content="1086026",
-                    description="-13915392",
-                    key="metric_card_4_2"
-                )
-            with e2:
-                ui.metric_card(
-                    content="1.5 Hrs",
-                    key="metric_card_e2",
-                    description="-1.3 Hrs",
-                )
-       
-        st.write("<hr>", unsafe_allow_html=True)
-
-        st.markdown(
-                f"""
-                <style>
-                .stPlotlyChart {{
-                outline: 15px solid {"#FFFFFF"};
-                border-radius: 3px;
-                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.20), 0 6px 20px 0 rgba(0, 0, 0, 0.30);
-                }}
-                </style>
-                """, unsafe_allow_html=True
-            )
-                    
-        left, m,  right = st.columns([0.15, 0.7, 0.15])
-        with m:
-            st.plotly_chart(diff_layer, use_container_width=True)
-
-        st.write("<div style='margin: 40px;'></div>", unsafe_allow_html=True)
-       
-        st.markdown("<h4 class='subheader-color'>Optimizer</h4>", unsafe_allow_html=True)
-        c11, c12 = st.columns(2)
-        with c11:
-            code = '''def optimizer():
-        return keras.optimizers.SGD()'''
-            st.code(code, language='python')
-        with c12:
-            code = '''def optimizer():
-        return keras.optimizers.Adam()'''
-            st.code(code, language='python')
 
 if __name__ == "__main__":
     main(confusion_matrix, accuracy, precision_per_class, layer_distribution)
