@@ -7,14 +7,40 @@ import pandas as pd
 import numpy as np
 import pickle
 import streamlit_shadcn_ui as ui
+import keras
+from PIL import Image
 
-
+model = keras.models.load_model("Model/TinyVGG.keras")
 
 class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
 
 with open('actual_labels.pkl', 'rb') as f:
     actual_labels = pickle.load(f)
 predictions = np.load('predictions.npy')
+
+
+def process_uploaded_images(uploaded_files):
+    predictions = []
+    for file in uploaded_files:
+        image = Image.open(file)
+
+        # Preprocess image: resize to 32x32 and normalize
+        preprocessed_image = np.array(image.resize((32, 32))) / 255.0
+        preprocessed_image = np.expand_dims(preprocessed_image, axis=0)
+
+        # Predict the class
+        prediction = model.predict(preprocessed_image)
+        predicted_class = np.argmax(prediction)
+        predicted_class_name = class_names[predicted_class]
+
+        predictions.append({
+            'image': image,
+            'filename': file.name,
+            'predicted_class': predicted_class,
+            'predicted_class_name': predicted_class_name
+        })
+
+    return predictions
 
 # Function to calculate confusion matrix
 def calculate_confusion_matrix(predictions, actual):
@@ -147,8 +173,8 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
     st.write("<style>.option-menu-container { margin-top: -30px; }</style>", unsafe_allow_html=True)
     page = option_menu(
         menu_title=None,
-        options=["Home", "Architecture", "Performance"],
-        icons = ["house", "diagram-2-fill", "bar-chart"],
+        options=["Home", "Architecture", "Performance", "Try TinyVGG"],
+        icons = ["house", "diagram-2-fill", "bar-chart", "cloud-upload"],
         menu_icon="cast",
         default_index=0,
         orientation="horizontal",
@@ -256,6 +282,24 @@ def main(confusion_matrix, accuracy, precision_per_class, layer_distribution):
             st.plotly_chart(layer_distribution, use_container_width=True)
         with right:
             st.plotly_chart(fig_precision_recall_f1, use_container_width=True)
+    elif page == "Try TinyVGG":
+        st.markdown("<h2 style='text-align: center; color: #000000;'>Try TinyVGG: Upload and Classify Your Images!</h2>", unsafe_allow_html=True)
+
+        # File upload
+        uploaded_files = st.file_uploader("Choose images to classify", type=['png', 'jpg', 'jpeg'], accept_multiple_files=True)
+        
+        if uploaded_files:
+            st.spinner('Classifying images...')
+            predictions = process_uploaded_images(uploaded_files)
+            st.success("Classification complete!")
+            
+            # Display results in a grid layout
+            cols = st.columns(len(predictions))
+            for idx, prediction in enumerate(predictions):
+                with cols[idx]:
+                    # st.image(prediction['image'], caption=prediction['filename'], use_column_width=True)
+                    # st.success(f"Predicted Class: {prediction['predicted_class_name'].upper()}")
+                    st.markdown(f"<h3>Predicted Class: {prediction['predicted_class_name'].upper()}</h3>", unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
