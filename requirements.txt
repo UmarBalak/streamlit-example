@@ -81,4 +81,4 @@ urllib3==2.2.1
 validators==0.28.0
 watchdog==4.0.0
 keras==2.1.5
-tensorflow==1.14.0
+tensorflow==2.15.0
